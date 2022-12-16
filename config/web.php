@@ -5,6 +5,8 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'language' => 'ru-RU',
+    'name' => 'Reapi',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -20,8 +22,11 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\user\models\UserModel',
             'enableAutoLogin' => true,
+            'on afterLogin' => function ($event) {
+                $event->identity->updateLastLogin();
+            },
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -47,6 +52,22 @@ $config = [
             'showScriptName' => false,
             'rules' => [
             ],
+        ],
+        'i18n' => [
+            'translations' => [
+                'user' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/user/messages',
+                ],
+            ],
+        ],
+        'reCaptcha' => [
+            'class' => 'himiklab\yii2\recaptcha\ReCaptchaConfig',
+            'siteKeyV2' => '6Ld9aYMjAAAAAPb9-_9WnrIgYPXZx9-eqNUmyZHl',
+            'secretV2' => '6Ld9aYMjAAAAALXofXGzFI4MTuX7cArrgMOzA9Mi',
+        ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
         ],
     ],
     'params' => $params,

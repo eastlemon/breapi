@@ -2,29 +2,40 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
+use JetBrains\PhpStorm\ArrayShape;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Response;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
+use yii\filters\AccessControl;
+use app\user\traits\EventTrait;
 
 class SiteController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
+    use EventTrait;
+
+    #[ArrayShape(['access' => "array", 'verbs' => "array"])]
+    public function behaviors(): array
     {
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout'],
+                'only' => [
+                    'index',
+                    'login',
+                    'logout',
+                    'request-password-reset',
+                    'password-reset',
+                    'account',
+                ],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
                         'allow' => true,
+                        'actions' => ['login', 'request-password-reset', 'password-reset'],
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'logout', 'account'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -32,97 +43,41 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
+                    'index' => ['get'],
+                    'account' => ['get', 'post'],
+                    'login' => ['get', 'post'],
                     'logout' => ['post'],
+                    'request-password-reset' => ['get', 'post'],
+                    'password-reset' => ['get', 'post'],
                 ],
             ],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function actions()
+    #[ArrayShape(['error' => "string[]", 'login' => "string[]", 'logout' => "string[]", 'request-password-reset' => "string[]", 'password-reset' => "string[]"])]
+    public function actions(): array
     {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            'login' => [
+                'class' => 'app\user\actions\LoginAction',
+            ],
+            'logout' => [
+                'class' => 'app\user\actions\LogoutAction',
+            ],
+            'request-password-reset' => [
+                'class' => 'app\user\actions\RequestPasswordResetAction',
+            ],
+            'password-reset' => [
+                'class' => 'app\user\actions\PasswordResetAction',
             ],
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
-    public function actionIndex()
+    public function actionIndex(): Response
     {
-        return $this->render('index');
-    }
-
-    /**
-     * Login action.
-     *
-     * @return Response|string
-     */
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-
-        $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
-
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
+        return $this->redirect('admin');
     }
 }

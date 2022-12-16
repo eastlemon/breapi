@@ -26,15 +26,46 @@ $config = [
             ],
         ],
         'db' => $db,
-    ],
-    'params' => $params,
-    /*
-    'controllerMap' => [
-        'fixture' => [ // Fixture generation command line.
-            'class' => 'yii\faker\FixtureController',
+        'user' => [
+            'class' => 'yii\web\User',
+            'identityClass' => 'app\user\models\UserModel',
+            'enableSession' => false,
+            'enableAutoLogin' => false,
+        ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
+        'i18n' => [
+            'translations' => [
+                'user' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/user/messages',
+                ],
+            ],
         ],
     ],
-    */
+    'modules' => [
+        'user' => [
+            'class' => 'app\user\ConsoleModule',
+            'controllerNamespace' => 'app\user\commands',
+        ],
+        'rbac' => [
+            'class' => 'yii2mod\rbac\ConsoleModule',
+        ],
+    ],
+    'params' => $params,
+    'controllerMap' => [
+        // php yii migrate/up --migrationPath=@app/user/migrations
+        'setup-user' => [
+            'class' => 'yii\console\controllers\MigrateController',
+            'migrationPath' => '@app/user/migrations',
+        ],
+        // php yii migrate/up --migrationPath=@yii/rbac/migrations
+        'setup-rbac' => [
+            'class' => 'yii\console\controllers\MigrateController',
+            'migrationPath' => '@yii/rbac/migrations',
+        ],
+    ],
 ];
 
 if (YII_ENV_DEV) {
