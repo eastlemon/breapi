@@ -55,6 +55,13 @@ $config = [
         ],
         'i18n' => [
             'translations' => [
+                '*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'app'=> [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                ],
                 'user' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@app/user/messages',
@@ -68,6 +75,34 @@ $config = [
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
+        ],
+    ],
+    'modules' => [
+        'admin' => [
+            'class' => 'app\modules\admin\Module',
+            'modules' => [
+                'rbac' => [
+                    'class' => 'yii2mod\rbac\Module',
+                    'controllerMap' => [
+                        'route' => [
+                            'class' => 'yii2mod\rbac\controllers\RouteController',
+                            'modelClass' => [
+                                'class' => 'yii2mod\rbac\models\RouteModel',
+                                'excludeModules' => ['debug', 'gii'],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'as access' => [
+                'class' => 'yii\filters\AccessControl',
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
         ],
     ],
     'params' => $params,
