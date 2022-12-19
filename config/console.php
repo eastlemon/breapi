@@ -6,7 +6,7 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'loader'],
     'controllerNamespace' => 'app\commands',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -42,6 +42,15 @@ $config = [
                     'basePath' => '@app/user/messages',
                 ],
             ],
+        ],
+        'redis' => [
+            'class' => \yii\redis\Connection::class,
+        ],
+        'loader' => [
+            'class' => \yii\queue\redis\Queue::class,
+            'as log' => \yii\queue\LogBehavior::class,
+            'redis' => 'redis',
+            'channel' => 'loader',
         ],
     ],
     'modules' => [
