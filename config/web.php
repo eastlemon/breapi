@@ -8,7 +8,7 @@ $config = [
     'language' => 'ru-RU',
     'name' => 'Reapi',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log', 'loader'],
+    'bootstrap' => ['app\config\bootstrap', 'log', 'loader'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -84,6 +84,9 @@ $config = [
             'as log' => \yii\queue\LogBehavior::class,
             'redis' => 'redis',
             'channel' => 'loader',
+        ],
+        'settings' => [
+            'class' => 'yii2mod\settings\components\Settings',
         ],
     ],
     'modules' => [

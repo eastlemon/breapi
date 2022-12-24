@@ -1,4 +1,5 @@
 <?php
+
 /** @var ActiveRecord $model */
 
 use himiklab\yii2\recaptcha\ReCaptcha2;
@@ -7,7 +8,6 @@ use yii\bootstrap5\Html;
 use yii\db\ActiveRecord;
 
 $this->title = Yii::t('user', 'Login');
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="static-page">

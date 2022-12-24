@@ -19,4 +19,13 @@ return [
     'Full Name' => 'Полное наименование',
     'Phone' => 'Телефон',
     'Year' => 'Год',
+    'Select Files' => 'Выбрать файлы',
+    'Import' => 'Импорт',
+    'Only excel files are allowed.' => 'Только файлы таблиц доступны к загрузке',
+    'Start Year' => 'Год начала',
+    'Format' => 'Формат',
+    'Update' => 'Обновить',
+    'Create' => 'Создать',
+    'Delete' => 'Удалить',
+    'Fio' => 'ФИО',
 ];

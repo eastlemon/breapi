@@ -4,28 +4,28 @@ namespace app\modules\admin\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Agent;
+use app\models\Inn;
 
 /**
- * AgentSearch represents the model behind the search form of `app\models\Agent`.
+ * InnSearch represents the model behind the search form of `app\models\Inn`.
  */
-class AgentSearch extends Agent
+class InnSearch extends Inn
 {
     /**
      * {@inheritdoc}
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            [['id', 'id_user', 'is_del'], 'integer'],
-            [['inn', 'created_at', 'updated_at'], 'safe'],
+            [['id_user'], 'integer'],
+            [['inn'], 'safe'],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function scenarios(): array
+    public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
@@ -38,9 +38,9 @@ class AgentSearch extends Agent
      *
      * @return ActiveDataProvider
      */
-    public function search(array $params): ActiveDataProvider
+    public function search($params)
     {
-        $query = Agent::find();
+        $query = Inn::find();
 
         // add conditions that should always apply here
 
@@ -58,11 +58,7 @@ class AgentSearch extends Agent
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
             'id_user' => $this->id_user,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'is_del' => $this->is_del,
         ]);
 
         $query->andFilterWhere(['like', 'inn', $this->inn]);

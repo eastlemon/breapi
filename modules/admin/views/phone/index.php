@@ -1,19 +1,18 @@
 <?php
 
-use app\models\Requisite;
+use app\models\Phone;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var app\modules\admin\models\search\RequisiteSearch $searchModel */
+/** @var app\modules\admin\models\search\PhoneSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = Yii::t('app', 'Requisites');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = Yii::t('app', 'Phones');
 ?>
 
-<div class="requisite-index">
+<div class="phone-index">
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -21,18 +20,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'full_name:ntext',
-            'phone',
-            'year',
+            'phone:ntext',
             'created_at',
             'updated_at',
             [
                 'class' => ActionColumn::class,
-                'urlCreator' => function ($action, Requisite $model) {
+                'urlCreator' => function ($action, Phone $model) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
-    ]); ?>
+    ]) ?>
 
 </div>

@@ -22,7 +22,11 @@
         "yii2mod/yii2-rbac": "*",
         "yii2mod/yii2-enum": "*",
         "yiisoft/yii2-queue": "^2.3",
-        "yiisoft/yii2-redis": "~2.0.0"
+        "yiisoft/yii2-redis": "~2.0.0",
+        "phpoffice/phpspreadsheet": "^1.25",
+        "yii2tech/spreadsheet": "*",
+        "yii2mod/yii2-settings": "*",
+        "kartik-v/yii2-date-range": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

@@ -11,8 +11,6 @@ use yii\web\IdentityInterface;
 use yii\web\View;
 
 $this->title = Yii::t('app', 'Change Password');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Account'), 'url' => ['/admin']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php $form = ActiveForm::begin(); ?>

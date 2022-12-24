@@ -2,17 +2,19 @@
 
 namespace app\modules\admin\controllers;
 
-use app\models\Agent;
-use app\modules\admin\models\search\AgentSearch;
+use app\models\Inn;
+use app\modules\admin\models\search\FioSearch;
+use app\modules\admin\models\search\InnSearch;
+use app\modules\admin\models\search\PhoneSearch;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * AgentController implements the CRUD actions for Agent model.
+ * InnController implements the CRUD actions for Inn model.
  */
-class AgentController extends Controller
+class InnController extends Controller
 {
     /**
      * @inheritDoc
@@ -23,7 +25,7 @@ class AgentController extends Controller
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -33,13 +35,14 @@ class AgentController extends Controller
     }
 
     /**
-     * Lists all Agent models.
+     * Lists all Inn models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new AgentSearch();
+        $searchModel = new InnSearch();
+        $searchModel->id_user = Yii::$app->user->id;
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -49,42 +52,30 @@ class AgentController extends Controller
     }
 
     /**
-     * Displays a single Agent model.
+     * Displays a single Phone model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
+        $fioSearch = new FioSearch();
+        $fioProvider = $fioSearch->search($this->request->queryParams);
+
+        $phoneSearch = new PhoneSearch();
+        $phoneProvider = $phoneSearch->search($this->request->queryParams);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'fioSearch' => $fioSearch,
+            'fioProvider' => $fioProvider,
+            'phoneSearch' => $phoneSearch,
+            'phoneProvider' => $phoneProvider,
         ]);
     }
 
     /**
-     * Creates a new Agent model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
-    public function actionCreate()
-    {
-        $model = new Agent();
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Agent model.
+     * Updates an existing Inn model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -104,7 +95,7 @@ class AgentController extends Controller
     }
 
     /**
-     * Deletes an existing Agent model.
+     * Deletes an existing Inn model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -118,15 +109,15 @@ class AgentController extends Controller
     }
 
     /**
-     * Finds the Agent model based on its primary key value.
+     * Finds the Inn model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Agent the loaded model
+     * @return Inn the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Agent::findOne(['id' => $id])) !== null) {
+        if (($model = Inn::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

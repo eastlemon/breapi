@@ -6,7 +6,7 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log', 'loader'],
+    'bootstrap' => ['app\config\bootstrap', 'log', 'loader'],
     'controllerNamespace' => 'app\commands',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -73,6 +73,11 @@ $config = [
         'setup-rbac' => [
             'class' => 'yii\console\controllers\MigrateController',
             'migrationPath' => '@yii/rbac/migrations',
+        ],
+        // php yii migrate --migrationPath=@vendor/yii2mod/yii2-settings/migrations
+        'setup-settings' => [
+            'class' => 'yii\console\controllers\MigrateController',
+            'migrationPath' => '@vendor/yii2mod/yii2-settings/migrations',
         ],
     ],
 ];

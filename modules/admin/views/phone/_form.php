@@ -1,20 +1,16 @@
 <?php
 
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap5\ActiveForm;
+use yii\bootstrap5\Html;
 
 /** @var yii\web\View $this */
-/** @var app\models\Requisite $model */
+/** @var app\models\Phone $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="requisite-form">
+<div class="phone-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-        <?= $form->field($model, 'year')->textInput() ?>
-
-        <?= $form->field($model, 'full_name')->textarea(['rows' => 6]) ?>
 
         <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
 

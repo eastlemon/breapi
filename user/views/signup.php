@@ -1,4 +1,5 @@
 <?php
+
 /** @var ActiveRecord $model */
 
 use yii\bootstrap5\ActiveForm;
@@ -6,7 +7,6 @@ use yii\bootstrap5\Html;
 use yii\db\ActiveRecord;
 
 $this->title = Yii::t('user', 'Signup');
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="site-signup">

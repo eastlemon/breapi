@@ -2,31 +2,34 @@
 
 namespace app\models;
 
+use app\modules\admin\models\User;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "agent".
+ * This is the model class for table "file".
  *
  * @property int $id
  * @property int $id_user User Owner
- * @property string $inn INN
+ * @property string $name File Name
+ * @property string $uniq_name File Unique Name
+ * @property string $target File Target
+ * @property string $ext File Extension
+ * @property int|null $is_new Delete Flag
  * @property string|null $created_at Creation Time
  * @property string|null $updated_at Updation Time
- * @property int|null $is_del Delete Flag
  *
- * @property Requisite[] $requisites
  * @property User $user
  */
-class Agent extends ActiveRecord
+class File extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName(): string
     {
-        return 'agent';
+        return 'file';
     }
 
     /**
@@ -35,10 +38,10 @@ class Agent extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['id_user', 'inn'], 'required'],
-            [['id_user', 'is_del'], 'integer'],
+            [['id_user', 'name', 'uniq_name', 'target', 'ext'], 'required'],
+            [['id_user', 'is_new'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['inn'], 'string', 'max' => 255],
+            [['name', 'uniq_name', 'target', 'ext'], 'string', 'max' => 255],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
@@ -51,21 +54,14 @@ class Agent extends ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'id_user' => Yii::t('app', 'Id User'),
-            'inn' => Yii::t('app', 'Inn'),
+            'name' => Yii::t('app', 'Name'),
+            'uniq_name' => Yii::t('app', 'Uniq Name'),
+            'target' => Yii::t('app', 'Target'),
+            'ext' => Yii::t('app', 'Ext'),
+            'is_new' => Yii::t('app', 'Is New'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
-            'is_del' => Yii::t('app', 'Is Del'),
         ];
-    }
-
-    /**
-     * Gets query for [[Requisites]].
-     *
-     * @return ActiveQuery
-     */
-    public function getRequisites(): ActiveQuery
-    {
-        return $this->hasMany(Requisite::class, ['id_agent' => 'id']);
     }
 
     /**

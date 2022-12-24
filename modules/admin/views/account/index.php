@@ -8,7 +8,6 @@ use yii\web\View;
 use yii\widgets\DetailView;
 
 $this->title = Yii::t('app', 'Account');
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="row">

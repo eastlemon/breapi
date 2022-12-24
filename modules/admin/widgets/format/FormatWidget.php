@@ -6,9 +6,9 @@ use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\base\Widget;
+use yii\bootstrap5\Html;
 use yii\di\NotInstantiableException;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\helpers\StringHelper;
 
 class FormatWidget extends Widget

@@ -1,19 +1,19 @@
 <?php
 
-use app\models\Agent;
-use yii\grid\ActionColumn;
+use app\models\Inn;
+use yii\bootstrap5\Html;
 use yii\helpers\Url;
+use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var app\modules\admin\models\search\AgentSearch $searchModel */
+/** @var app\modules\admin\models\search\InnSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = Yii::t('app', 'Agents');
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="agent-index">
+<div class="inn-index">
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -21,16 +21,23 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'inn',
+            [
+                'attribute' => 'inn',
+                'value' => function (Inn $data) {
+                    return Html::a(Html::encode($data->inn), Url::to(['view', 'id' => $data->id]));
+                },
+                'format' => 'raw',
+            ],
             'created_at',
             'updated_at',
             [
                 'class' => ActionColumn::class,
-                'urlCreator' => function ($action, Agent $model) {
+                'template' => '{update} {delete}',
+                'urlCreator' => function ($action, Inn $model) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],
         ],
-    ]); ?>
+    ]) ?>
 
 </div>

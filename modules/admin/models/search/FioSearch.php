@@ -4,12 +4,12 @@ namespace app\modules\admin\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Requisite;
+use app\models\Fio;
 
 /**
- * RequisiteSearch represents the model behind the search form of `app\models\Requisite`.
+ * FioSearch represents the model behind the search form of `app\models\Fio`.
  */
-class RequisiteSearch extends Requisite
+class FioSearch extends Fio
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class RequisiteSearch extends Requisite
     public function rules(): array
     {
         return [
-            [['id', 'id_agent', 'year', 'is_del'], 'integer'],
-            [['full_name', 'phone', 'created_at', 'updated_at'], 'safe'],
+            [['year'], 'integer'],
+            [['fio'], 'safe'],
         ];
     }
 
@@ -40,12 +40,20 @@ class RequisiteSearch extends Requisite
      */
     public function search(array $params): ActiveDataProvider
     {
-        $query = Requisite::find();
+        $query = Fio::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
         ]);
 
         $this->load($params);
@@ -58,16 +66,10 @@ class RequisiteSearch extends Requisite
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'id_agent' => $this->id_agent,
             'year' => $this->year,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'is_del' => $this->is_del,
         ]);
 
-        $query->andFilterWhere(['like', 'full_name', $this->full_name])
-            ->andFilterWhere(['like', 'phone', $this->phone]);
+        $query->andFilterWhere(['like', 'fio', $this->fio]);
 
         return $dataProvider;
     }
