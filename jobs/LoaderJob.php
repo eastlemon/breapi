@@ -42,7 +42,7 @@ class LoaderJob extends BaseObject implements JobInterface
 
                 $inn = (string) $this->data[$keys['inn']];
 
-                if ($this->isValidInn($inn)) {
+                if (static::isValidInn($inn)) {
                     $phone = (string) $this->data[$keys['phone']];
 
                     if (($_inn = Inn::findOne(['inn' => $inn])) !== null) {
@@ -67,7 +67,7 @@ class LoaderJob extends BaseObject implements JobInterface
         }
     }
 
-    public function isValidInn(string $inn): bool
+    public static function isValidInn(string $inn): bool
     {
         if (strlen($inn) == 10) {
             if (preg_match('#([\d]{10})#', $inn, $m)) {
