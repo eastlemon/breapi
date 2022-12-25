@@ -42,7 +42,7 @@ class LoaderJob extends BaseObject implements JobInterface
 
                 $inn = (string) $this->data[$keys['inn']];
 
-                if (static::isValidInn($inn)) {
+                if (self::isValidInn($inn)) {
                     $phone = (string) $this->data[$keys['phone']];
 
                     if (($_inn = Inn::findOne(['inn' => $inn])) !== null) {

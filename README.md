@@ -8,3 +8,5 @@ INSTALLATION
 5) php yii rbac/migrate
 6) php yii user/create admin@reapi.ru admin password
 7) php yii user/role/assign admin admin@reapi.ru
+8) php yii setup-settings
+9) php yii migrate

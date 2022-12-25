@@ -22,7 +22,12 @@ class UploadForm extends Model
     {
         return [
             [['sheedFiles', 'year', 'format'], 'required'],
-            [['sheedFiles'], 'file', 'extensions' => 'xlsx', 'skipOnEmpty' => false, 'maxFiles' => 10, 'maxSize' => 1024 * 1024],
+            [['sheedFiles'], 'file',
+                'extensions' => 'xlsx',
+                'skipOnEmpty' => false,
+                'maxFiles' => 10,
+                'maxSize' => 10 * 1024 * 1024,
+            ],
             [['year'], 'integer'],
             [['format'], 'string'],
         ];
