@@ -17,7 +17,7 @@ class PhoneSearch extends Phone
     public function rules(): array
     {
         return [
-            [['year'], 'integer'],
+            [['id_inn', 'year'], 'integer'],
             [['phone'], 'safe'],
         ];
     }
@@ -38,7 +38,7 @@ class PhoneSearch extends Phone
      *
      * @return ActiveDataProvider
      */
-    public function search(array $params): ActiveDataProvider
+    public function search(int $inn, array $params): ActiveDataProvider
     {
         $query = Phone::find();
 
@@ -66,6 +66,7 @@ class PhoneSearch extends Phone
 
         // grid filtering conditions
         $query->andFilterWhere([
+            'id_inn' => $inn,
             'year' => $this->year,
         ]);
 

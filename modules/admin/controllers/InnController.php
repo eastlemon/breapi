@@ -59,14 +59,16 @@ class InnController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
         $fioSearch = new FioSearch();
-        $fioProvider = $fioSearch->search($this->request->queryParams);
+        $fioProvider = $fioSearch->search($model->id, $this->request->queryParams);
 
         $phoneSearch = new PhoneSearch();
-        $phoneProvider = $phoneSearch->search($this->request->queryParams);
+        $phoneProvider = $phoneSearch->search($model->id, $this->request->queryParams);
 
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
             'fioSearch' => $fioSearch,
             'fioProvider' => $fioProvider,
             'phoneSearch' => $phoneSearch,

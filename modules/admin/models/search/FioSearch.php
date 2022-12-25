@@ -17,7 +17,7 @@ class FioSearch extends Fio
     public function rules(): array
     {
         return [
-            [['year'], 'integer'],
+            [['id_inn', 'year'], 'integer'],
             [['fio'], 'safe'],
         ];
     }
@@ -38,7 +38,7 @@ class FioSearch extends Fio
      *
      * @return ActiveDataProvider
      */
-    public function search(array $params): ActiveDataProvider
+    public function search(int $inn, array $params): ActiveDataProvider
     {
         $query = Fio::find();
 
@@ -66,6 +66,7 @@ class FioSearch extends Fio
 
         // grid filtering conditions
         $query->andFilterWhere([
+            'id_inn' => $inn,
             'year' => $this->year,
         ]);
 
