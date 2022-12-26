@@ -13,6 +13,7 @@ use yii\helpers\FileHelper;
 class UploadForm extends Model
 {
     public $format;
+    public $tag;
     public $year;
     public $sheedFiles;
     public $target;
@@ -21,13 +22,14 @@ class UploadForm extends Model
     public function rules(): array
     {
         return [
-            [['sheedFiles', 'year', 'format'], 'required'],
+            [['sheedFiles', 'tag', 'year', 'format'], 'required'],
             [['sheedFiles'], 'file',
                 'extensions' => 'xlsx',
                 'skipOnEmpty' => false,
                 'maxFiles' => 10,
                 'maxSize' => 10 * 1024 * 1024,
             ],
+            [['tag'], 'integer'],
             [['year'], 'integer'],
             [['format'], 'string'],
         ];
@@ -71,6 +73,7 @@ class UploadForm extends Model
                                 Yii::$app->{$loader}->push(new LoaderJob([
                                     'data' => $item,
                                     'uid' => Yii::$app->user->id,
+                                    'tag' => $this->tag,
                                     'year' => $this->year,
                                     'format' => $this->format,
                                 ]));

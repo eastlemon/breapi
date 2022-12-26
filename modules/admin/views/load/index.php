@@ -1,10 +1,12 @@
 <?php
 
 use app\modules\admin\widgets\format\FormatWidget;
+use kartik\select2\Select2;
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
 /* @var $model app\modules\admin\models\forms\UploadForm */
+/* @var $tags array */
 /* @var $years array */
 
 $this->title = Yii::t('app', 'Import');
@@ -13,6 +15,16 @@ $this->title = Yii::t('app', 'Import');
 <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'sheedFiles[]')->fileInput(['multiple' => true, 'class' => 'form-control-file']) ?>
+
+    <?= $form->field($model, 'tag')->widget(Select2::class, [
+        'data' => $tags,
+        'options' => [
+            'placeholder' => Yii::t('app', 'Select...'),
+        ],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ])->label(Yii::t('app', 'Tag')) ?>
 
     <?= $form->field($model, 'year')->dropDownList($years) ?>
 

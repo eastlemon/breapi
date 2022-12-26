@@ -28,6 +28,11 @@ $this->title = Yii::t('app', 'Agents');
                 },
                 'format' => 'raw',
             ],
+            [
+                'attribute' => 'tag',
+                'value' => 'tag.name',
+                'label' => Yii::t('app', 'Tag'),
+            ],
             'created_at',
             'updated_at',
             [

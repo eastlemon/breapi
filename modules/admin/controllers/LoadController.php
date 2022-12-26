@@ -2,10 +2,12 @@
 
 namespace app\modules\admin\controllers;
 
+use app\models\Tag;
 use app\modules\admin\models\forms\UploadForm;
 use Yii;
 use yii\base\Exception;
 use yii\db\Query;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -33,6 +35,7 @@ class LoadController extends Controller
 
         return $this->render('index', [
             'model' => $form,
+            'tags' => ArrayHelper::map(Tag::find()->all(), 'id', 'name'),
             'years' => $years,
         ]);
     }
@@ -41,6 +44,10 @@ class LoadController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        return ['result' => (new Query())->from('queue')->count()];
+        if (!$count = (new Query())->from('queue')->count()) {
+            $count = '0';
+        }
+
+        return ['result' => $count];
     }
 }

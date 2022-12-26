@@ -11,6 +11,8 @@ use app\models\Inn;
  */
 class InnSearch extends Inn
 {
+    public $tag;
+
     /**
      * {@inheritdoc}
      */
@@ -18,7 +20,7 @@ class InnSearch extends Inn
     {
         return [
             [['id_user'], 'integer'],
-            [['inn'], 'safe'],
+            [['inn', 'tag'], 'safe'],
         ];
     }
 
@@ -40,7 +42,7 @@ class InnSearch extends Inn
      */
     public function search($params)
     {
-        $query = Inn::find();
+        $query = Inn::find()->joinWith(['tag']);
 
         // add conditions that should always apply here
 
@@ -56,6 +58,11 @@ class InnSearch extends Inn
             ],
         ]);
 
+        $dataProvider->sort->attributes['tag'] = [
+            'asc' => ['tag.name' => SORT_ASC],
+            'desc' => ['tag.name' => SORT_DESC],
+        ];
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -66,10 +73,12 @@ class InnSearch extends Inn
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id_user' => $this->id_user,
+            'inn.id_user' => $this->id_user,
         ]);
 
-        $query->andFilterWhere(['like', 'inn', $this->inn]);
+        $query
+            ->andFilterWhere(['like', 'inn.inn', $this->inn])
+            ->andFilterWhere(['like', 'tag.name', $this->tag]);
 
         return $dataProvider;
     }

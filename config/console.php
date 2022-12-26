@@ -93,7 +93,7 @@ $config = [
             'class' => 'yii\console\controllers\MigrateController',
             'migrationPath' => '@vendor/yii2mod/yii2-settings/migrations',
         ],
-        'migrate' => [
+        'setup-queue' => [
             'class' => 'yii\console\controllers\MigrateController',
             'migrationPath' => null,
             'migrationNamespaces' => [

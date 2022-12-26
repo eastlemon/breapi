@@ -5,6 +5,7 @@ namespace app\jobs;
 use app\modules\admin\models\Fio;
 use app\modules\admin\models\Inn;
 use app\modules\admin\models\Phone;
+use Yii;
 use yii\base\BaseObject;
 use yii\helpers\StringHelper;
 use yii\queue\JobInterface;
@@ -13,6 +14,7 @@ class LoaderJob extends BaseObject implements JobInterface
 {
     public array $data;
     public int $uid;
+    public int $tag;
     public int $year;
     public string $format;
 
@@ -35,36 +37,35 @@ class LoaderJob extends BaseObject implements JobInterface
             if (isset($keys['surname']) && isset($keys['name']) && isset($keys['patronymic'])) $composite = true;
         }
 
-        if (count(array_keys($keys)) == count(array_keys($this->data))) {
-            if ((isset($keys['surname']) && isset($keys['name']) && isset($keys['patronymic'])) || isset($keys['fio'])) {
-                if (isset($keys['inn'])) {
-                    if ($composite !== true) $full_name = $this->data[$keys['fio']];
-                    else $full_name = $this->data[$keys['surname']] . ' ' .
-                        $this->data[$keys['name']] . ' ' .
-                        $this->data[$keys['patronymic']];
+        if ((isset($keys['surname']) && isset($keys['name']) && isset($keys['patronymic'])) || isset($keys['fio'])) {
+            if (isset($keys['inn'])) {
+                if ($composite !== true) $full_name = $this->data[$keys['fio']];
+                else $full_name = $this->data[$keys['surname']] . ' ' .
+                    $this->data[$keys['name']] . ' ' .
+                    $this->data[$keys['patronymic']];
 
-                    $inn = (string) $this->data[$keys['inn']];
+                $inn = (string) $this->data[$keys['inn']];
 
-                    if (static::isValidInn($inn)) {
-                        $phone = (string) $this->data[$keys['phone']];
+                if (static::isValidInn($inn)) {
+                    $phone = (string) $this->data[$keys['phone']];
 
-                        if (($_inn = Inn::findOne(['inn' => $inn])) !== null) {
-                            if ((Fio::findOne(['fio' => $full_name])) === null) {
-                                (new Fio($_inn->id, $this->year, $full_name))->save();
-                            }
-                            if ((Phone::findOne(['phone' => $phone])) === null) {
-                                (new Phone($_inn->id, $this->year, $phone))->save();
-                            }
-                        } else {
-                            $_inn = new Inn();
-                            $_inn->id_user = $this->uid;
-                            $_inn->inn = $inn;
-                            $_inn->save();
-
+                    if (($_inn = Inn::findOne(['inn' => $inn])) !== null) {
+                        if ((Fio::findOne(['fio' => $full_name])) === null) {
                             (new Fio($_inn->id, $this->year, $full_name))->save();
-
+                        }
+                        if ((Phone::findOne(['phone' => $phone])) === null) {
                             (new Phone($_inn->id, $this->year, $phone))->save();
                         }
+                    } else {
+                        $_inn = new Inn();
+                        $_inn->id_user = $this->uid;
+                        $_inn->id_tag = $this->tag;
+                        $_inn->inn = $inn;
+                        $_inn->save();
+
+                        (new Fio($_inn->id, $this->year, $full_name))->save();
+
+                        (new Phone($_inn->id, $this->year, $phone))->save();
                     }
                 }
             }
