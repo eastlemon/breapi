@@ -4,7 +4,7 @@ use app\modules\admin\widgets\format\FormatWidget;
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
-/* @var $model app\models\File */
+/* @var $model app\modules\admin\models\forms\UploadForm */
 /* @var $years array */
 
 $this->title = Yii::t('app', 'Import');
@@ -23,3 +23,7 @@ $this->title = Yii::t('app', 'Import');
     </div>
 
 <?php ActiveForm::end(); ?>
+
+<hr>
+
+<p><?= Yii::t('app', 'Loader Queue') ?>: <span id="loader-queue"><?= Yii::t('app', 'Just a second') ?></span></p>

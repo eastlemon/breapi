@@ -28,4 +28,6 @@ return [
     'Create' => 'Создать',
     'Delete' => 'Удалить',
     'Fio' => 'ФИО',
+    'Loader Queue' => 'Очередь загрузчика',
+    'Just a second' => 'Секунду...',
 ];

@@ -8,7 +8,7 @@ $config = [
     'language' => 'ru-RU',
     'name' => 'Reapi',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['app\config\bootstrap', 'log', 'loader'],
+    'bootstrap' => ['app\config\bootstrap', 'log', 'loader1', 'loader2'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -45,6 +45,11 @@ $config = [
                     'levels' => ['error', 'warning'],
                     'except' => ['yii\web\HttpException:404'],
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'categories' => ['jobs'],
+                    'logFile' => '@app/runtime/logs/jobs.log',
+                ],
             ],
         ],
         'db' => $db,
@@ -77,14 +82,23 @@ $config = [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
-        'redis' => [
-            'class' => \yii\redis\Connection::class,
+        'loader1' => [
+            'class' => \yii\queue\db\Queue::class,
+            'db' => 'db', // DB connection component or its config
+            'tableName' => '{{%queue}}', // Table name
+            'channel' => 'channel1', // Queue channel key
+            'mutex' => \yii\mutex\FileMutex::class,
+            'ttr' => 5 * 60, // Max time for job execution
+            'attempts' => 3, // Max number of attempts
         ],
-        'loader' => [
-            'class' => \yii\queue\redis\Queue::class,
-            'as log' => \yii\queue\LogBehavior::class,
-            'redis' => 'redis',
-            'channel' => 'loader',
+        'loader2' => [
+            'class' => \yii\queue\db\Queue::class,
+            'db' => 'db', // DB connection component or its config
+            'tableName' => '{{%queue}}', // Table name
+            'channel' => 'channel2', // Queue channel key
+            'mutex' => \yii\mutex\FileMutex::class,
+            'ttr' => 5 * 60, // Max time for job execution
+            'attempts' => 3, // Max number of attempts
         ],
         'settings' => [
             'class' => 'yii2mod\settings\components\Settings',

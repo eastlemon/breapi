@@ -12,10 +12,8 @@ class SpreadsheetHandler
     /**
      * @throws Exception
      */
-    public static function import(ActiveRecord $file): array
+    public static function import(string $inputFileName): array
     {
-        $inputFileName = Yii::getAlias('@app') . '/' . $file->target . '/' . $file->uniq_name . '.' . $file->ext;
-
         /**  Identify the type of $inputFileName  **/
         $inputFileType = IOFactory::identify($inputFileName);
 

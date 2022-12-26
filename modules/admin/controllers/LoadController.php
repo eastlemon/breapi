@@ -5,6 +5,7 @@ namespace app\modules\admin\controllers;
 use app\modules\admin\models\forms\UploadForm;
 use Yii;
 use yii\base\Exception;
+use yii\db\Query;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -13,7 +14,7 @@ class LoadController extends Controller
 {
     /**
      * @throws Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception|\Throwable
      */
     public function actionIndex(): Response|string
     {
@@ -34,5 +35,12 @@ class LoadController extends Controller
             'model' => $form,
             'years' => $years,
         ]);
+    }
+
+    public function actionCheck(): array
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return ['result' => (new Query())->from('queue')->count()];
     }
 }

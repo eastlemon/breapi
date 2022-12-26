@@ -6,7 +6,7 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['app\config\bootstrap', 'log', 'loader'],
+    'bootstrap' => ['app\config\bootstrap', 'log', 'loader1', 'loader2'],
     'controllerNamespace' => 'app\commands',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -22,6 +22,11 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'categories' => ['jobs'],
+                    'logFile' => '@app/runtime/logs/jobs.log',
                 ],
             ],
         ],
@@ -43,14 +48,23 @@ $config = [
                 ],
             ],
         ],
-        'redis' => [
-            'class' => \yii\redis\Connection::class,
+        'loader1' => [
+            'class' => \yii\queue\db\Queue::class,
+            'db' => 'db', // DB connection component or its config
+            'tableName' => '{{%queue}}', // Table name
+            'channel' => 'channel1', // Queue channel key
+            'mutex' => \yii\mutex\FileMutex::class,
+            'ttr' => 5 * 60, // Max time for job execution
+            'attempts' => 3, // Max number of attempts
         ],
-        'loader' => [
-            'class' => \yii\queue\redis\Queue::class,
-            'as log' => \yii\queue\LogBehavior::class,
-            'redis' => 'redis',
-            'channel' => 'loader',
+        'loader2' => [
+            'class' => \yii\queue\db\Queue::class,
+            'db' => 'db', // DB connection component or its config
+            'tableName' => '{{%queue}}', // Table name
+            'channel' => 'channel2', // Queue channel key
+            'mutex' => \yii\mutex\FileMutex::class,
+            'ttr' => 5 * 60, // Max time for job execution
+            'attempts' => 3, // Max number of attempts
         ],
     ],
     'modules' => [
@@ -78,6 +92,13 @@ $config = [
         'setup-settings' => [
             'class' => 'yii\console\controllers\MigrateController',
             'migrationPath' => '@vendor/yii2mod/yii2-settings/migrations',
+        ],
+        'migrate' => [
+            'class' => 'yii\console\controllers\MigrateController',
+            'migrationPath' => null,
+            'migrationNamespaces' => [
+                'yii\queue\db\migrations',
+            ],
         ],
     ],
 ];

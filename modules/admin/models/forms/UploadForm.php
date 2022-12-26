@@ -4,10 +4,10 @@ namespace app\modules\admin\models\forms;
 
 use app\common\SpreadsheetHandler;
 use app\jobs\LoaderJob;
-use app\modules\admin\models\File;
 use Yii;
 use yii\base\Exception;
 use yii\base\Model;
+use yii\db\Query;
 use yii\helpers\FileHelper;
 
 class UploadForm extends Model
@@ -43,34 +43,32 @@ class UploadForm extends Model
 
     /**
      * @throws Exception|\PhpOffice\PhpSpreadsheet\Reader\Exception
+     * @throws \Throwable
      */
     public function upload(): bool
     {
         if ($this->validate()) {
-            $this->target = 'web/uploads/u_' . Yii::$app->user->id;
+            $this->target = 'web/uploads';
             $this->folder = Yii::getAlias('@app') . '/' . $this->target;
 
             if (FileHelper::createDirectory($this->folder)) {
                 foreach ($this->sheedFiles as $file) {
                     $uniq_name = Yii::$app->security->generateRandomString(9);
 
-                    $file->saveAs($this->folder . '/' . $uniq_name . '.' . $file->extension);
+                    $inputFileName = $this->folder . '/' . $uniq_name . '.' . $file->extension;
 
-                    $model = new File();
-                    $model->name = $file->name;
-                    $model->uniq_name = $uniq_name;
-                    $model->target = $this->target;
-                    $model->ext = $file->extension;
-                    $model->save();
+                    $file->saveAs($inputFileName);
 
                     try {
-                        $sheet = SpreadsheetHandler::import($model);
+                        $sheet = SpreadsheetHandler::import($inputFileName);
 
                         foreach ($sheet as $item) {
                             $item = array_filter($item);
 
                             if (!empty($item)) {
-                                Yii::$app->loader->push(new LoaderJob([
+                                $loader = static::getLeastBusyQueue();
+
+                                Yii::$app->{$loader}->push(new LoaderJob([
                                     'data' => $item,
                                     'uid' => Yii::$app->user->id,
                                     'year' => $this->year,
@@ -81,6 +79,8 @@ class UploadForm extends Model
                     } catch (Exception $e) {
                         Yii::info($e->getMessage(), 'jobs');
                     }
+
+                    unlink($inputFileName);
                 }
 
                 return true;
@@ -88,5 +88,26 @@ class UploadForm extends Model
         }
 
         return false;
+    }
+
+    public static function getLeastBusyQueue(): string
+    {
+        $selected = 'loader1';
+        $_count = 0;
+
+        foreach (range(1, 2) as $channel) {
+            $count = (new Query())
+                ->from('queue')
+                ->where(['channel' => "channel{$channel}"])
+                ->count();
+
+            if ($count < $_count) {
+                $selected = "loader{$channel}";
+            }
+
+            $_count = $count;
+        }
+
+        return $selected;
     }
 }
