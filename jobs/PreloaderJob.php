@@ -11,6 +11,7 @@ use yii\queue\JobInterface;
 
 class PreloaderJob extends BaseObject implements JobInterface
 {
+    public $uid;
     public $inputFileName;
     public $tag;
     public $year;
@@ -33,7 +34,7 @@ class PreloaderJob extends BaseObject implements JobInterface
 
                     Yii::$app->{$loader}->push(new LoaderJob([
                         'data' => $item,
-                        'uid' => Yii::$app->user->id,
+                        'uid' => $this->uid,
                         'tag' => $this->tag,
                         'year' => $this->year,
                         'format' => $this->format,

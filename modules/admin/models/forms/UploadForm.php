@@ -60,6 +60,7 @@ class UploadForm extends Model
                     $file->saveAs($inputFileName);
 
                     Yii::$app->preloader->push(new PreloaderJob([
+                        'uid' => Yii::$app->user->id,
                         'inputFileName' => $inputFileName,
                         'tag' => $this->tag,
                         'year' => $this->year,
