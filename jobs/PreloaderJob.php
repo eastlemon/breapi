@@ -40,6 +40,8 @@ class PreloaderJob extends BaseObject implements JobInterface
                     ]));
                 }
             }
+
+            unlink($this->inputFileName);
         } catch (Exception $e) {
             Yii::info($e->getMessage(), 'jobs');
         }

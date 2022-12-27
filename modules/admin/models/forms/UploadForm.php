@@ -65,8 +65,6 @@ class UploadForm extends Model
                         'year' => $this->year,
                         'format' => $this->format,
                     ]));
-
-                    unlink($inputFileName);
                 }
 
                 return true;
