@@ -2,12 +2,10 @@
 
 namespace app\modules\admin\models\forms;
 
-use app\common\SpreadsheetHandler;
-use app\jobs\LoaderJob;
+use app\jobs\PreloaderJob;
 use Yii;
 use yii\base\Exception;
 use yii\base\Model;
-use yii\db\Query;
 use yii\helpers\FileHelper;
 
 class UploadForm extends Model
@@ -61,27 +59,12 @@ class UploadForm extends Model
 
                     $file->saveAs($inputFileName);
 
-                    try {
-                        $sheet = SpreadsheetHandler::import($inputFileName);
-
-                        foreach ($sheet as $item) {
-                            $item = array_filter($item);
-
-                            if (!empty($item)) {
-                                $loader = static::getLeastBusyQueue();
-
-                                Yii::$app->{$loader}->push(new LoaderJob([
-                                    'data' => $item,
-                                    'uid' => Yii::$app->user->id,
-                                    'tag' => $this->tag,
-                                    'year' => $this->year,
-                                    'format' => $this->format,
-                                ]));
-                            }
-                        }
-                    } catch (Exception $e) {
-                        Yii::info($e->getMessage(), 'jobs');
-                    }
+                    Yii::$app->preloader->push(new PreloaderJob([
+                        'inputFileName' => $inputFileName,
+                        'tag' => $this->tag,
+                        'year' => $this->year,
+                        'format' => $this->format,
+                    ]));
 
                     unlink($inputFileName);
                 }
@@ -91,26 +74,5 @@ class UploadForm extends Model
         }
 
         return false;
-    }
-
-    public static function getLeastBusyQueue(): string
-    {
-        $selected = 'loader1';
-        $_count = 0;
-
-        foreach (range(1, 2) as $channel) {
-            $count = (new Query())
-                ->from('queue')
-                ->where(['channel' => "channel{$channel}"])
-                ->count();
-
-            if ($count < $_count) {
-                $selected = "loader{$channel}";
-            }
-
-            $_count = $count;
-        }
-
-        return $selected;
     }
 }

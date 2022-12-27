@@ -5,7 +5,6 @@ namespace app\jobs;
 use app\modules\admin\models\Fio;
 use app\modules\admin\models\Inn;
 use app\modules\admin\models\Phone;
-use Yii;
 use yii\base\BaseObject;
 use yii\helpers\StringHelper;
 use yii\queue\JobInterface;

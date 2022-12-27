@@ -25,7 +25,8 @@
         "phpoffice/phpspreadsheet": "^1.25",
         "yii2mod/yii2-settings": "*",
         "kartik-v/yii2-date-range": "dev-master",
-        "kartik-v/yii2-widget-select2": "dev-master"
+        "kartik-v/yii2-widget-select2": "dev-master",
+        "yiisoft/yii2-redis": "~2.0.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

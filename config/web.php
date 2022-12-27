@@ -8,7 +8,7 @@ $config = [
     'language' => 'ru-RU',
     'name' => 'Reapi',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['app\config\bootstrap', 'log', 'loader1', 'loader2'],
+    'bootstrap' => ['app\config\bootstrap', 'log', 'preloader', 'loader1', 'loader2'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -81,6 +81,15 @@ $config = [
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
+        ],
+        'redis' => [
+            'class' => \yii\redis\Connection::class,
+        ],
+        'preloader' => [
+            'class' => \yii\queue\redis\Queue::class,
+            'as log' => \yii\queue\LogBehavior::class,
+            'redis' => 'redis',
+            'channel' => 'preloader',
         ],
         'loader1' => [
             'class' => \yii\queue\db\Queue::class,
