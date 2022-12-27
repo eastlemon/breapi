@@ -27,9 +27,9 @@ class PreloaderJob extends BaseObject implements JobInterface
             $sheet = SpreadsheetHandler::import($this->inputFileName);
 
             foreach ($sheet as $item) {
-                $item = array_filter($item);
+//                $item = array_filter($item);
 
-                if (!empty($item)) {
+//                if (!empty($item)) {
                     $loader = static::getLeastBusyQueue();
 
                     Yii::$app->{$loader}->push(new LoaderJob([
@@ -39,7 +39,7 @@ class PreloaderJob extends BaseObject implements JobInterface
                         'year' => $this->year,
                         'format' => $this->format,
                     ]));
-                }
+//                }
             }
 
             unlink($this->inputFileName);
