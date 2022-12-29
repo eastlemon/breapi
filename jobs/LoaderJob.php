@@ -45,56 +45,19 @@ class LoaderJob extends BaseObject implements JobInterface
 
                 $inn = (string) $this->data[$keys['inn']];
 
-//                if (static::isValidInn($inn)) {
-                    $phone = (string) $this->data[$keys['phone']];
+                $phone = (string) $this->data[$keys['phone']];
 
-                    if (($_inn = Inn::findOne(['inn' => $inn])) !== null) {
-                        if ((Fio::findOne(['fio' => $full_name])) === null) {
-                            (new Fio($_inn->id, $this->year, $full_name))->save();
-                        }
-                        if ((Phone::findOne(['phone' => $phone])) === null) {
-                            (new Phone($_inn->id, $this->year, $phone))->save();
-                        }
-                    } else {
-                        $_inn = new Inn();
-                        $_inn->id_user = $this->uid;
-                        $_inn->id_tag = $this->tag;
-                        $_inn->inn = $inn;
-                        $_inn->save();
+                if (($_inn = Inn::findOne(['inn' => $inn])) === null) {
+                    $_inn = new Inn();
+                    $_inn->id_user = $this->uid;
+                    $_inn->id_tag = $this->tag;
+                    $_inn->inn = $inn;
+                    $_inn->save();
+                }
 
-                        (new Fio($_inn->id, $this->year, $full_name))->save();
-
-                        (new Phone($_inn->id, $this->year, $phone))->save();
-                    }
-//                }
+                (new Fio($_inn->id, $this->year, $full_name))->save();
+                (new Phone($_inn->id, $this->year, $phone))->save();
             }
         }
     }
-
-//    public static function isValidInn(string $inn): bool
-//    {
-//        if (strlen($inn) == 10) {
-//            if (preg_match('#([\d]{10})#', $inn, $m)) {
-//                $inn = $m[0];
-//                $code10 = (($inn[0] * 2 + $inn[1] * 4 + $inn[2] *10 + $inn[3] * 3 +
-//                            $inn[4] * 5 + $inn[5] * 9 + $inn[6] * 4 + $inn[7] * 6 +
-//                            $inn[8] * 8) % 11 ) % 10;
-//                if ($code10 == $inn[9]) return true;
-//            }
-//        } else {
-//            if (preg_match('#([\d]{12})#', $inn, $m)) {
-//                $inn = $m[0];
-//                $code11 = (($inn[0] * 7 + $inn[1] * 2 + $inn[2] * 4 + $inn[3] *10 +
-//                            $inn[4] * 3 + $inn[5] * 5 + $inn[6] * 9 + $inn[7] * 4 +
-//                            $inn[8] * 6 + $inn[9] * 8) % 11 ) % 10;
-//                $code12 = (($inn[0] * 3 + $inn[1] * 7 + $inn[2] * 2 + $inn[3] * 4 +
-//                            $inn[4] *10 + $inn[5] * 3 + $inn[6] * 5 + $inn[7] * 9 +
-//                            $inn[8] * 4 + $inn[9] * 6 + $inn[10]* 8) % 11 ) % 10;
-//
-//                if ($code11 == $inn[10] && $code12 == $inn[11]) return true;
-//            }
-//        }
-//
-//        return false;
-//    }
 }

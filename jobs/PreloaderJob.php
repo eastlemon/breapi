@@ -27,19 +27,15 @@ class PreloaderJob extends BaseObject implements JobInterface
             $sheet = SpreadsheetHandler::import($this->inputFileName);
 
             foreach ($sheet as $item) {
-//                $item = array_filter($item);
+                $loader = static::getLeastBusyQueue();
 
-//                if (!empty($item)) {
-                    $loader = static::getLeastBusyQueue();
-
-                    Yii::$app->{$loader}->push(new LoaderJob([
-                        'data' => $item,
-                        'uid' => $this->uid,
-                        'tag' => $this->tag,
-                        'year' => $this->year,
-                        'format' => $this->format,
-                    ]));
-//                }
+                Yii::$app->{$loader}->push(new LoaderJob([
+                    'data' => $item,
+                    'uid' => $this->uid,
+                    'tag' => $this->tag,
+                    'year' => $this->year,
+                    'format' => $this->format,
+                ]));
             }
 
             unlink($this->inputFileName);
