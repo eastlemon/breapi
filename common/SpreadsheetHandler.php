@@ -2,8 +2,6 @@
 
 namespace app\common;
 
-use Yii;
-use yii\db\ActiveRecord;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
 
@@ -19,11 +17,14 @@ class SpreadsheetHandler
 
         /**  Create a new Reader of the type that has been identified  **/
         $reader = IOFactory::createReader($inputFileType);
+        $reader->setReadDataOnly(true);
+        $reader->setReadEmptyCells(false);
 
         /**  Load $inputFileName to a Spreadsheet Object  **/
         $spreadsheet = $reader->load($inputFileName);
+        $sheet = $spreadsheet->getActiveSheet()->toArray();
 
         /**  Convert Spreadsheet Object to an Array for ease of use  **/
-        return $spreadsheet->getActiveSheet()->toArray();
+        return $sheet;
     }
 }

@@ -56,6 +56,7 @@ $config = [
             'as log' => \yii\queue\LogBehavior::class,
             'redis' => 'redis',
             'channel' => 'preloader',
+            'ttr' => 60 * 60,
         ],
         'loader1' => [
             'class' => \yii\queue\db\Queue::class,
