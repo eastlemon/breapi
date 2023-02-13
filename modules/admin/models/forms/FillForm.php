@@ -45,6 +45,8 @@ class FillForm extends Model
      */
     public function upload(): bool
     {
+        Yii::error('0');
+
         if ($this->validate()) {
             $this->target = 'web/uploads';
             $this->folder = Yii::getAlias('@app') . '/' . $this->target;
