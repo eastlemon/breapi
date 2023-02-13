@@ -20,12 +20,15 @@ class FillerJob extends BaseObject implements JobInterface
     public function execute($queue): void
     {
         if (isset($this->data[$this->keys['inn']])) {
-            if ($_inn = Inn::findOne(['inn' => $this->data[$this->keys['inn']]])) {
+            $inn = preg_replace('/[^0-9]/', '', $this->data[$this->keys['inn']]);
+
+            if ($_inn = Inn::findOne(['inn' => $inn])) {
                 $filler = new Filler();
                 $filler->id_file = $this->fid;
                 $filler->fio = $_inn->fios[array_key_last($_inn->fios)]['fio'];
                 $filler->inn = $_inn->inn;
-                $filler->phone = (string) $this->data[$this->keys['phone']] ?:
+                $filler->phone = (string) isset($this->keys['phone']) ?
+                    $this->data[$this->keys['phone']] :
                     $_inn->phones[array_key_last($_inn->phones)]['phone'];
                 $filler->save();
             }
