@@ -1,9 +1,12 @@
 <?php
 
+use app\assets\LoaderAsset;
 use app\modules\admin\widgets\format\FormatWidget;
 use kartik\select2\Select2;
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
+
+LoaderAsset::register($this);
 
 /* @var $model app\modules\admin\models\forms\UploadForm */
 /* @var $tags array */
@@ -32,10 +35,9 @@ $this->title = Yii::t('app', 'Import');
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Load'), ['class' => 'btn btn-success']) ?>
+        <div class="btn">
+            <?= Yii::t('app', 'Queue') ?>: <span id="loader-queue"><?= Yii::t('app', 'Just a second') ?></span>
+        </div>
     </div>
 
 <?php ActiveForm::end(); ?>
-
-<hr>
-
-<p><?= Yii::t('app', 'Loader Queue') ?>: <span id="loader-queue"><?= Yii::t('app', 'Just a second') ?></span></p>

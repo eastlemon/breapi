@@ -6,7 +6,7 @@ use yii\bootstrap5\Html;
 
 /* @var $model DynamicModel */
 
-$this->title = Yii::t('app', 'Search');
+$this->title = Yii::t('app', 'Filling');
 ?>
 
 <?php $form = ActiveForm::begin(); ?>

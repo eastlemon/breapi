@@ -11,11 +11,12 @@ use yii\queue\JobInterface;
 
 class PreloaderJob extends BaseObject implements JobInterface
 {
-    public $uid;
-    public $inputFileName;
-    public $tag;
-    public $year;
-    public $format;
+    public int $uid;
+    public string $inputFileName;
+    public string $tag;
+    public int $year;
+    public array $keys;
+    public bool $composite;
 
     /**
      * @throws Exception
@@ -34,7 +35,8 @@ class PreloaderJob extends BaseObject implements JobInterface
                     'uid' => $this->uid,
                     'tag' => $this->tag,
                     'year' => $this->year,
-                    'format' => $this->format,
+                    'keys' => $this->keys,
+                    'composite' => $this->composite,
                 ]));
             }
 

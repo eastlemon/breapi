@@ -7,15 +7,14 @@ use Yii;
 use yii\base\Exception;
 use yii\base\Model;
 use yii\helpers\FileHelper;
+use yii\helpers\StringHelper;
 
 class UploadForm extends Model
 {
-    public $format;
+    public $sheedFiles;
     public $tag;
     public $year;
-    public $sheedFiles;
-    public $target;
-    public $folder;
+    public $format;
 
     public function rules(): array
     {
@@ -48,14 +47,22 @@ class UploadForm extends Model
     public function upload(): bool
     {
         if ($this->validate()) {
-            $this->target = 'web/uploads';
-            $this->folder = Yii::getAlias('@app') . '/' . $this->target;
+            $target = 'web/uploads';
+            $folder = Yii::getAlias('@app') . '/' . $target;
 
-            if (FileHelper::createDirectory($this->folder)) {
+            if (FileHelper::createDirectory($folder)) {
+                $keys = [];
+
+                foreach (StringHelper::explode($this->format) as $key => $item) {
+                    if ($item == '@') continue;
+
+                    $keys[strtolower($item)] = $key;
+                }
+
                 foreach ($this->sheedFiles as $file) {
                     $uniq_name = Yii::$app->security->generateRandomString(9);
 
-                    $inputFileName = $this->folder . '/' . $uniq_name . '.' . $file->extension;
+                    $inputFileName = $folder . '/' . $uniq_name . '.' . $file->extension;
 
                     $file->saveAs($inputFileName);
 
@@ -64,7 +71,8 @@ class UploadForm extends Model
                         'inputFileName' => $inputFileName,
                         'tag' => $this->tag,
                         'year' => $this->year,
-                        'format' => $this->format,
+                        'keys' => $keys,
+                        'composite' => isset($keys['surname'], $keys['name'], $keys['patronymic']),
                     ]));
                 }
 

@@ -8,7 +8,7 @@ $config = [
     'language' => 'ru-RU',
     'name' => 'Reapi',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['app\config\bootstrap', 'log', 'preloader', 'loader1', 'loader2'],
+    'bootstrap' => ['app\config\bootstrap', 'log', 'preloader', 'loader1', 'loader2', 'filler'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -109,6 +109,13 @@ $config = [
             'mutex' => \yii\mutex\FileMutex::class,
             'ttr' => 5 * 60, // Max time for job execution
             'attempts' => 3, // Max number of attempts
+        ],
+        'filler' => [
+            'class' => \yii\queue\redis\Queue::class,
+            'as log' => \yii\queue\LogBehavior::class,
+            'redis' => 'redis',
+            'channel' => 'filler',
+            'ttr' => 60 * 60,
         ],
         'settings' => [
             'class' => 'yii2mod\settings\components\Settings',
