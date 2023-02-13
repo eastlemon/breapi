@@ -45,8 +45,6 @@ class FillForm extends Model
      */
     public function upload(): bool
     {
-        Yii::error('0');
-
         if ($this->validate()) {
             $this->target = 'web/uploads';
             $this->folder = Yii::getAlias('@app') . '/' . $this->target;
@@ -76,6 +74,11 @@ class FillForm extends Model
                     }
 
                     foreach (SpreadsheetHandler::import($inputFileName) as $item) {
+                        Yii::error([
+                            'data' => $item,
+                            'keys' => $keys,
+                            'fid' => $file->id,
+                        ]);
                         Yii::$app->filler->push(new FillerJob([
                             'data' => $item,
                             'keys' => $keys,
