@@ -4,10 +4,8 @@ namespace app\jobs;
 
 use app\models\Inn;
 use app\modules\admin\models\Filler;
-use Yii;
 use yii\base\BaseObject;
 use yii\base\Exception;
-use yii\helpers\Json;
 use yii\queue\JobInterface;
 
 /**
@@ -22,31 +20,15 @@ class FillerJob extends BaseObject implements JobInterface
     public function execute($queue): void
     {
         if (isset($this->data[$this->keys['inn']])) {
-//            Yii::error($this->keys['inn']);
-//            Yii::error($this->data[$this->keys['inn']]);
-
-            $_j = Inn::findOne(['inn' => $this->data[$this->keys['inn']]]);
-//            Yii::error(Json::encode($_j));
-            Yii::error(Json::encode($_j->fios));
-            Yii::error(Json::encode($_j->phones));
-//            Yii::error($_j->fios[array_key_last($_j->fios)]);
-            Yii::error($_j->fios[array_key_last($_j->fios)]['fio']);
-//            Yii::error($_j->phones[array_key_last($_j->phones)]);
-            Yii::error($_j->phones[array_key_last($_j->phones)]['phone']);
-//            if ($_inn = Inn::findOne(['inn' => $this->data[$this->keys['inn']]])) {
-//                Yii::error($_inn);
-//                    $fios = end($_inn->fios);
-//                    Yii::error($fios->fio);
-//                    $phones = end($_inn->phones);
-//                    Yii::error($phones->phone);
-//
-//                    $filler = new Filler();
-//                    $filler->id_file = $this->fid;
-//                    $filler->fio = end($_inn->fios)->fio;
-//                    $filler->inn = $_inn->inn;
-//                    $filler->phone = (string) $this->data[$this->keys['phone']] ?: end($_inn->phones)->phone;
-//                    $filler->save();
-//            }
+            if ($_inn = Inn::findOne(['inn' => $this->data[$this->keys['inn']]])) {
+                $filler = new Filler();
+                $filler->id_file = $this->fid;
+                $filler->fio = $_inn->fios[array_key_last($_inn->fios)]['fio'];
+                $filler->inn = $_inn->inn;
+                $filler->phone = (string) $this->data[$this->keys['phone']] ?:
+                    $_inn->phones[array_key_last($_inn->phones)]['phone'];
+                $filler->save();
+            }
         }
     }
 }

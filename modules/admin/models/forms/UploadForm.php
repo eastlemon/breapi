@@ -60,20 +60,24 @@ class UploadForm extends Model
                 }
 
                 foreach ($this->sheedFiles as $file) {
-                    $uniq_name = Yii::$app->security->generateRandomString(9);
+                    try {
+                        $uniq_name = Yii::$app->security->generateRandomString(9);
 
-                    $inputFileName = $folder . '/' . $uniq_name . '.' . $file->extension;
+                        $inputFileName = $folder . '/' . $uniq_name . '.' . $file->extension;
 
-                    $file->saveAs($inputFileName);
+                        $file->saveAs($inputFileName);
 
-                    Yii::$app->preloader->push(new PreloaderJob([
-                        'uid' => Yii::$app->user->id,
-                        'inputFileName' => $inputFileName,
-                        'tag' => $this->tag,
-                        'year' => $this->year,
-                        'keys' => $keys,
-                        'composite' => isset($keys['surname'], $keys['name'], $keys['patronymic']),
-                    ]));
+                        Yii::$app->preloader->push(new PreloaderJob([
+                            'uid' => Yii::$app->user->id,
+                            'inputFileName' => $inputFileName,
+                            'tag' => $this->tag,
+                            'year' => $this->year,
+                            'keys' => $keys,
+                            'composite' => isset($keys['surname'], $keys['name'], $keys['patronymic']),
+                        ]));
+                    } catch (Exception $e) {
+                        Yii::info($e->getMessage(), 'jobs');
+                    }
                 }
 
                 return true;
