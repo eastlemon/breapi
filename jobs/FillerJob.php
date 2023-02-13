@@ -23,12 +23,12 @@ class FillerJob extends BaseObject implements JobInterface
                 $phones = end($_inn->phones);
                 \Yii::error($phones->phone);
 
-                $filler = new Filler();
-                $filler->id_file = $this->fid;
-                $filler->fio = end($_inn->fios)->fio;
-                $filler->inn = $_inn->inn;
-                $filler->phone = (string) $this->data[$this->keys['phone']] ?: end($_inn->phones)->phone;
-                $filler->save();
+//                $filler = new Filler();
+//                $filler->id_file = $this->fid;
+//                $filler->fio = end($_inn->fios)->fio;
+//                $filler->inn = $_inn->inn;
+//                $filler->phone = (string) $this->data[$this->keys['phone']] ?: end($_inn->phones)->phone;
+//                $filler->save();
             }
         }
     }
