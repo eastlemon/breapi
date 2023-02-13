@@ -22,17 +22,17 @@ class FillerJob extends BaseObject implements JobInterface
     public function execute($queue): void
     {
         if (isset($this->data[$this->keys['inn']])) {
-            Yii::error($this->keys['inn']);
-            Yii::error($this->data[$this->keys['inn']]);
+//            Yii::error($this->keys['inn']);
+//            Yii::error($this->data[$this->keys['inn']]);
 
             $_j = Inn::findOne(['inn' => $this->data[$this->keys['inn']]]);
-            Yii::error(Json::encode($_j));
+//            Yii::error(Json::encode($_j));
             Yii::error(Json::encode($_j->fios));
             Yii::error(Json::encode($_j->phones));
-            Yii::error($_j->fios[array_key_last($_j->fios)]);
-            Yii::error($_j->fios[array_key_last($_j->fios)]->fio);
-            Yii::error($_j->phones[array_key_last($_j->phones)]);
-            Yii::error($_j->phones[array_key_last($_j->phones)]->phone);
+//            Yii::error($_j->fios[array_key_last($_j->fios)]);
+            Yii::error($_j->fios[array_key_last($_j->fios)]['fio']);
+//            Yii::error($_j->phones[array_key_last($_j->phones)]);
+            Yii::error($_j->phones[array_key_last($_j->phones)]['phone']);
 //            if ($_inn = Inn::findOne(['inn' => $this->data[$this->keys['inn']]])) {
 //                Yii::error($_inn);
 //                    $fios = end($_inn->fios);
