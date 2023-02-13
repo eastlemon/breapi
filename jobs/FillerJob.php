@@ -15,14 +15,14 @@ class FillerJob extends BaseObject implements JobInterface
 
     public function execute($queue): void
     {
-//        \Yii::error('1');
+        \Yii::error('1');
         if (isset($this->data[$this->keys['inn']])) {
             if ($_inn = Inn::findOne(['inn' => $this->data[$this->keys['inn']]])) {
-//                \Yii::error($_inn);
-//                $fios = end($_inn->fios);
-//                \Yii::error($fios->fio);
-//                $phones = end($_inn->phones);
-//                \Yii::error($phones->phone);
+                \Yii::error($_inn);
+                $fios = end($_inn->fios);
+                \Yii::error($fios->fio);
+                $phones = end($_inn->phones);
+                \Yii::error($phones->phone);
 
                 $filler = new Filler();
                 $filler->id_file = $this->fid;
