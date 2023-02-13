@@ -64,29 +64,25 @@ class FillForm extends Model
                 $file->ext = $this->sheedFile->extension;
                 $file->save();
 
-                try {
-                    $keys = [];
+                $keys = [];
 
-                    foreach (StringHelper::explode($this->format) as $key => $item) {
-                        if ($item == '@') continue;
+                foreach (StringHelper::explode($this->format) as $key => $item) {
+                    if ($item == '@') continue;
 
-                        $keys[strtolower($item)] = $key;
-                    }
+                    $keys[strtolower($item)] = $key;
+                }
 
-                    foreach (SpreadsheetHandler::import($inputFileName) as $item) {
+                foreach (SpreadsheetHandler::import($inputFileName) as $item) {
 //                        Yii::error([
 //                            'data' => $item,
 //                            'keys' => $keys,
 //                            'fid' => $file->id,
 //                        ]);
-                        Yii::$app->filler->push(new FillerJob([
-                            'data' => $item,
-                            'keys' => $keys,
-                            'fid' => $file->id,
-                        ]));
-                    }
-                } catch (Exception $e) {
-                    Yii::info($e->getMessage(), 'jobs');
+                    Yii::$app->filler->push(new FillerJob([
+                        'data' => $item,
+                        'keys' => $keys,
+                        'fid' => $file->id,
+                    ]));
                 }
 
                 return true;
