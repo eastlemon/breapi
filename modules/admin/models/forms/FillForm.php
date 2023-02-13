@@ -74,11 +74,11 @@ class FillForm extends Model
                     }
 
                     foreach (SpreadsheetHandler::import($inputFileName) as $item) {
-                        Yii::error([
-                            'data' => $item,
-                            'keys' => $keys,
-                            'fid' => $file->id,
-                        ]);
+//                        Yii::error([
+//                            'data' => $item,
+//                            'keys' => $keys,
+//                            'fid' => $file->id,
+//                        ]);
                         Yii::$app->filler->push(new FillerJob([
                             'data' => $item,
                             'keys' => $keys,

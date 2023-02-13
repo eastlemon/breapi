@@ -7,7 +7,6 @@ use app\modules\admin\models\forms\FillForm;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
-use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -50,7 +49,7 @@ class FillController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        if (!$count = Yii::$app->redis->lrange('filler.waiting', 0, 0)) {
+        if (!$count = Yii::$app->redis->hlen('filler.messages')) {
             $count = '0';
         }
 
