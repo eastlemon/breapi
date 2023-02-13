@@ -17,6 +17,7 @@ use Yii;
  * @property string|null $created_at Creation Time
  * @property string|null $updated_at Updation Time
  *
+ * @property Filler[] $fillers
  * @property User $user
  */
 class File extends \yii\db\ActiveRecord
@@ -58,6 +59,16 @@ class File extends \yii\db\ActiveRecord
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
+    }
+
+    /**
+     * Gets query for [[Fillers]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFillers()
+    {
+        return $this->hasMany(Filler::class, ['id_file' => 'id']);
     }
 
     /**

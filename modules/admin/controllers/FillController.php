@@ -6,9 +6,12 @@ use app\models\File;
 use app\modules\admin\models\forms\FillForm;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\UploadedFile;
+use yii2tech\spreadsheet\Spreadsheet;
 
 class FillController extends Controller
 {
@@ -47,14 +50,42 @@ class FillController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-//        if (!$count = Yii::$app->redis->executeCommand('PUBSUB', ['filler.messages'])) {
-//            $count = '0';
-//        }
-
         if (!$count = Yii::$app->redis->lrange('filler.waiting', 0, 0)) {
             $count = '0';
         }
 
         return ['result' => $count];
+    }
+
+    public function actionDownload(int $id)
+    {
+        $to_return = null;
+
+        if ($file = File::findOne($id)) {
+
+
+            $exporter = new Spreadsheet([
+                'dataProvider' => new ArrayDataProvider([
+                    'allModels' => $file->fillers,
+                ]),
+                'columns' => [
+                    'fio',
+                    'inn',
+                    'phone',
+                ],
+                'showHeader' => false,
+            ]);
+
+            $to_return = $exporter->send($file->name);
+        }
+
+        return $to_return;
+    }
+
+    public function actionDelete(int $id)
+    {
+        File::find()->where(['id' => $id])->one()->delete();
+
+        return $this->redirect(['index']);
     }
 }
