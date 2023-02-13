@@ -21,10 +21,10 @@ class FillerJob extends BaseObject implements JobInterface
     public function execute($queue): void
     {
         try {
-            Yii::error($this->keys['inn']);
-            Yii::error($this->data[$this->keys['inn']]);
             if (isset($this->data[$this->keys['inn']])) {
                 if ($_inn = Inn::findOne(['inn' => $this->data[$this->keys['inn']]])) {
+            Yii::error($this->keys['inn']);
+            Yii::error($this->data[$this->keys['inn']]);
                     Yii::error($_inn);
                     $fios = end($_inn->fios);
                     Yii::error($fios->fio);
