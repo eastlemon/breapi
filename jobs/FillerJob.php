@@ -7,6 +7,7 @@ use app\modules\admin\models\Filler;
 use Yii;
 use yii\base\BaseObject;
 use yii\base\Exception;
+use yii\helpers\Json;
 use yii\queue\JobInterface;
 
 /**
@@ -23,6 +24,9 @@ class FillerJob extends BaseObject implements JobInterface
         if (isset($this->data[$this->keys['inn']])) {
             Yii::error($this->keys['inn']);
             Yii::error($this->data[$this->keys['inn']]);
+
+            $_j = Inn::findOne(['inn' => $this->data[$this->keys['inn']]]);
+            Yii::error(Json::encode($_j));
 //            if ($_inn = Inn::findOne(['inn' => $this->data[$this->keys['inn']]])) {
 //                Yii::error($_inn);
 //                    $fios = end($_inn->fios);
