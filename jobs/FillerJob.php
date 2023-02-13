@@ -29,8 +29,8 @@ class FillerJob extends BaseObject implements JobInterface
             Yii::error(Json::encode($_j));
             Yii::error(Json::encode($_j->fios));
             Yii::error(Json::encode($_j->phones));
-            Yii::error(Json::encode($_j->fios[array_key_last($_j->fios)]));
-            Yii::error(Json::encode($_j->phones[array_key_last($_j->phones)]));
+            Yii::error(Json::encode($_j->fios[array_key_last($_j->fios)]->fio));
+            Yii::error(Json::encode($_j->phones[array_key_last($_j->phones)]->phone));
 //            if ($_inn = Inn::findOne(['inn' => $this->data[$this->keys['inn']]])) {
 //                Yii::error($_inn);
 //                    $fios = end($_inn->fios);
