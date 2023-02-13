@@ -17,6 +17,10 @@ class FillerJob extends BaseObject implements JobInterface
     {
         if (isset($this->data[$this->keys['inn']])) {
             if ($_inn = Inn::findOne(['inn' => $this->data[$this->keys['inn']]])) {
+                \Yii::error($_inn);
+                \Yii::error(end($_inn->fios)->fio);
+                \Yii::error(end($_inn->phones)->phone);
+
                 $filler = new Filler();
                 $filler->id_file = $this->fid;
                 $filler->fio = end($_inn->fios)->fio;
