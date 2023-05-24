@@ -2,9 +2,9 @@
 
 namespace app\modules\admin\models\forms;
 
-use app\common\SpreadsheetHandler;
 use app\jobs\FillerJob;
 use app\modules\admin\models\File;
+use avadim\FastExcelReader\Excel;
 use Yii;
 use yii\base\Exception;
 use yii\base\Model;
@@ -65,14 +65,14 @@ class FillForm extends Model
                 $file->save();
 
                 $keys = [];
-
                 foreach (StringHelper::explode($this->format) as $key => $item) {
                     if ($item == '@') continue;
 
                     $keys[strtolower($item)] = $key;
                 }
 
-                foreach (SpreadsheetHandler::import($inputFileName) as $item) {
+                $cells = Excel::open($inputFileName)->readRows(false, Excel::KEYS_ZERO_BASED);
+                foreach ($cells as $item) {
                     try {
                         Yii::$app->filler->push(new FillerJob([
                             'data' => $item,

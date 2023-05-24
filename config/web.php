@@ -76,8 +76,8 @@ $config = [
         ],
         'reCaptcha' => [
             'class' => 'himiklab\yii2\recaptcha\ReCaptchaConfig',
-            'siteKeyV2' => '6Ld9aYMjAAAAAPb9-_9WnrIgYPXZx9-eqNUmyZHl',
-            'secretV2' => '6Ld9aYMjAAAAALXofXGzFI4MTuX7cArrgMOzA9Mi',
+            'siteKeyV2' => '6LfOfDUmAAAAAIo1SpLfZ5e569Lui2L2xZOPfLtU',
+            'secretV2' => '6LfOfDUmAAAAAK3uS0-GveK2Yk-Kd2vkkpuJ8kOl',
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
