@@ -2,7 +2,7 @@
 
 namespace app\jobs;
 
-use avadim\FastExcelReader\Excel;
+use app\common\SpreadsheetHandler;
 use Yii;
 use yii\base\BaseObject;
 use yii\base\Exception;
@@ -25,8 +25,9 @@ class PreloaderJob extends BaseObject implements JobInterface
     public function execute($queue): void
     {
         try {
-            $cells = Excel::open($this->inputFileName)->readRows(false, Excel::KEYS_ZERO_BASED);
-            foreach ($cells as $item) {
+            $sheet = SpreadsheetHandler::import($this->inputFileName);
+
+            foreach ($sheet as $item) {
                 $loader = static::getLeastBusyQueue();
 
                 Yii::$app->{$loader}->push(new LoaderJob([

@@ -4,7 +4,6 @@ namespace app\modules\admin\models\forms;
 
 use app\jobs\FillerJob;
 use app\modules\admin\models\File;
-use avadim\FastExcelReader\Excel;
 use Yii;
 use yii\base\Exception;
 use yii\base\Model;
@@ -71,8 +70,7 @@ class FillForm extends Model
                     $keys[strtolower($item)] = $key;
                 }
 
-                $cells = Excel::open($inputFileName)->readRows(false, Excel::KEYS_ZERO_BASED);
-                foreach ($cells as $item) {
+                foreach (SpreadsheetHandler::import($inputFileName) as $item) {
                     try {
                         Yii::$app->filler->push(new FillerJob([
                             'data' => $item,
